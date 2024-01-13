@@ -12,9 +12,58 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			contacts: []
 		},
 		actions: {
+			createContact: async(name, email, address, phone) => {
+				let response = await fetch("https://playground.4geeks.com/apis/fake/contact/", {
+					method: "POST",
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						"full_name": name,
+						"email": email,
+						"agenda_slug": "brodysAgenda",
+						"address": address,
+						"phone": phone
+					})
+				})
+				let data = await response.json();
+			},
+			getContacts: async() => {
+				let response = await fetch("https://playground.4geeks.com/apis/fake/contact/agenda/brodysAgenda")
+				let data = await response.json()
+				setStore({contacts: data})
+			},
+			getEachContact: async(id) => {
+				let response = await fetch("https://playground.4geeks.com/apis/fake/contact/" + id)
+				let data = await response.json()
+				return data
+			},
+			updateContact: async(id, name, email, address, phone) => {
+				let response = await fetch("https://playground.4geeks.com/apis/fake/contact/" + id, {
+					method: "PUT",
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						"full_name": name,
+						"email": email,
+						"agenda_slug": "brodysAgenda",
+						"address": address,
+						"phone": phone
+					})
+				})
+				let data = await response.json();
+			},
+			deleteContact: async(id) => {
+				console.log("hey")
+				let response = await fetch("https://playground.4geeks.com/apis/fake/contact/" + id, {
+					method: "DELETE",
+					headers: { 'Content-Type': 'application/json' },
+				})
+				let data = await response.json();
+				console.log(data)
+			},
+
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
